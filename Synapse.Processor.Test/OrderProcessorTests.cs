@@ -9,7 +9,12 @@ using Xunit.Abstractions;
 namespace Synapse.Processor.Test
 {
    public class OrderProcessorTests(ITestOutputHelper _output)
-   {   
+   {
+      /// <summary>
+      /// This is the only test in place to exercise the code.  The basic idea is to 
+      /// process all the orders using a mock to simulate the http calls. 
+      /// </summary>
+      /// <returns></returns>
       [Fact]
       public async Task OrderProcessorTests_Success()
       {
@@ -26,24 +31,23 @@ namespace Synapse.Processor.Test
          //assert
          var actualDeliveryCount = testData.Sum(y => y.Items.Count(x => x.DeliveryNotification == 1));
 
-         Assert.True(startingDeliveryCount == 0);
-         Assert.True(expectedDeliveryCount == actualDeliveryCount);
+         Assert.True(startingDeliveryCount == 0, "Starting delivery count should be zero");
+         Assert.True(expectedDeliveryCount == actualDeliveryCount, "Expected delivery count should match the actual delivery count");
       }
 
       private OrderProcessor GetOrderProcessor(IEnumerable<Order> testData)
       {
          //arrange
-         Mock<IRestClient> mockRestClient = new();
          RestResult<VoidResult> voidRestResult = new() { Result = new(), IsSuccessStatusCode = true };
          RestResult<IEnumerable<Order>> orderRestResult = new() { Result = testData, IsSuccessStatusCode = true };
 
+         Mock<IRestClient> mockRestClient = new();
          mockRestClient
-            .Setup(y => y.SendRequest<VoidResult>(It.IsAny<HttpMethod>(), It.IsAny<string>(), It.IsAny<object?>()))
-            .ReturnsAsync(voidRestResult);
+             .Setup(y => y.SendRequest<VoidResult>(It.IsAny<HttpMethod>(), It.IsAny<string>(), It.IsAny<object?>()))
+             .ReturnsAsync(voidRestResult);
          mockRestClient
             .Setup(y => y.SendRequest<IEnumerable<Order>>(It.IsAny<HttpMethod>(), It.IsAny<string>(), It.IsAny<object?>()))
             .ReturnsAsync(orderRestResult);
-
 
          XunitLogger<AlertService> alertServiceLogger = new(_output);
          AlertService alertService = new(alertServiceLogger, mockRestClient.Object);

@@ -4,7 +4,14 @@ using Synapse.Processor.Service;
 
 namespace Synapse.Processor;
 
-//intended to be called from any sort of consumer
+/// <summary>
+/// This class is intended to be called from any sort of consumer for a production
+/// ready order processor. 
+/// </summary>
+/// <param name="_logger"></param>
+/// <param name="_alertService"></param>
+/// <param name="_orderService"></param>
+/// <param name="_updateService"></param>
 public class OrderProcessor(ILogger<OrderProcessor> _logger,
     AlertService _alertService,
     OrderService _orderService,

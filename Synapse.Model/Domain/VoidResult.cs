@@ -1,6 +1,7 @@
 ﻿namespace Synapse.Model.Domain;
 
 /// <summary>
-/// class to more clearly identify when a SendRequest has no return type
+/// Class services to act as a 'Void' for those generics that require soemething.
+/// In this context, it is used for SendRequest has no return type
 /// </summary>
 public class VoidResult { }

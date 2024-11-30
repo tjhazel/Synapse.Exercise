@@ -7,7 +7,9 @@ using System.Net.Http.Headers;
 namespace Synapse.Domain.Http;
 
 /// <summary>
-/// Abstraction to wrap httpclient so we can mock http requests. 
+/// Abstraction to wrap httpclient so we can mock http requests.   This class will not be called
+/// with the unit test. In a real world scenario, the entry point would be a azure function
+/// or some other method of kicking it off.
 /// </summary>
 /// <param name="_httpClientFactory"></param>
 public class RestClient(IHttpClientFactory _httpClientFactory) : IRestClient
